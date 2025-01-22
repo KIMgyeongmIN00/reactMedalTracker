@@ -4,7 +4,7 @@ const App = () => {
   return (
     <>
       <Title />
-      <InputForm />
+      <Content />
     </>
   );
 };
@@ -15,15 +15,17 @@ const Title = () => {
     justifyContent: "center",
     alignItems: "center",
   };
+
   return <h1 style={titleStyle}>2024 파리 올림픽 메달 기록</h1>;
 };
 
-const InputForm = () => {
+const Content = () => {
   const [countryName, setCountryName] = useState("");
-  const [countGoldMedal, setCountGoldMedal] = useState(0);
-  const [countSilverMedal, setCountSilverMedal] = useState(0);
-  const [countBronzeMedal, setCountBronzeMedal] = useState(0);
+  const [countGoldMedal, setCountGoldMedal] = useState(0); // state묶어보기
+  const [countSilverMedal, setCountSilverMedal] = useState(0); // state묶어보기
+  const [countBronzeMedal, setCountBronzeMedal] = useState(0); // state묶어보기
   const [countries, setCountries] = useState([]);
+
   const findCountryByName = (name) => {
     return countries.find((country) => country.countryName === name);
   };
@@ -93,7 +95,7 @@ const InputForm = () => {
       setCountSilverMedal(0);
       setCountBronzeMedal(0);
 
-      alert(`${countryName} 국가의 데이터를 업데이트했습니다.`);
+      alert(`${countryName} 메달\ 데이터를 업데이트했습니다.`);
     } else {
       // 국가가 존재하지 않으면 경고 메시지
       alert(`${countryName}에 해당하는 국가가 없습니다!`);
@@ -104,7 +106,6 @@ const InputForm = () => {
   const handleDelete = (id) => {
     // 삭제할 국가 찾기
     const countryToDelete = countries.find((country) => country.id === id);
-    const isCountryFound = findCountryByName(countryName);
 
     // 국가 삭제
     const deletedCountries = countries.filter((country) => country.id !== id);
@@ -116,65 +117,69 @@ const InputForm = () => {
 
   return (
     <>
-      <form
-        onSubmit={handleFormSubmit}
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          gap: "10px",
-        }}
-      >
-        <input
-          type="text"
-          value={countryName}
-          onChange={(e) => {
-            setCountryName(e.target.value);
-          }}
-          placeholder="국가"
+      <form onSubmit={handleFormSubmit}>
+        <CountryInput
+          countryName={countryName}
+          setCountryName={setCountryName}
         />
-        <input
-          type="number"
+        <MedalInput
+          medalType="금메달"
           value={countGoldMedal}
-          onChange={(e) => {
-            setCountGoldMedal(Number(e.target.value));
-          }}
-          placeholder="금메달"
-          min="0"
+          onChange={setCountGoldMedal}
         />
-        <input
-          type="number"
+        <MedalInput
+          medalType="은메달"
           value={countSilverMedal}
-          onChange={(e) => {
-            setCountSilverMedal(Number(e.target.value));
-          }}
-          placeholder="은메달"
-          min="0"
+          onChange={setCountSilverMedal}
         />
-        <input
-          type="number"
+        <MedalInput
+          medalType="동메달"
           value={countBronzeMedal}
-          onChange={(e) => {
-            setCountBronzeMedal(Number(e.target.value));
-          }}
-          placeholder="동메달"
-          min="0"
+          onChange={setCountBronzeMedal}
         />
-        <button type="submit">국가 등록하기</button>
-        <button type="button" onClick={handleUpdate}>
-          업데이트
-        </button>
+        <Buttons
+          handleFormSubmit={handleFormSubmit}
+          handleUpdate={handleUpdate}
+        />
       </form>
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <ListCountry countries={countries} handleDelete={handleDelete} />
-      </div>
+      <ListCountry countries={countries} handleDelete={handleDelete} />
     </>
+  );
+};
+
+const CountryInput = ({ countryName, setCountryName }) => {
+  return (
+    <>
+      <input
+        type="text"
+        value={countryName}
+        onChange={(e) => setCountryName(e.target.value)}
+        placeholder="국가"
+      />
+    </>
+  );
+};
+
+const Buttons = ({ handleUpdate }) => {
+  return (
+    <>
+      <button type="submit">국가 등록하기</button>
+      <button type="button" onClick={handleUpdate}>
+        업데이트
+      </button>
+    </>
+  );
+};
+
+const MedalInput = ({ medalType, value, onChange }) => {
+  return (
+    <input
+      type="number"
+      value={value}
+      onChange={(e) => onChange(Number(e.target.value))}
+      placeholder={medalType}
+      min="0"
+    />
   );
 };
 
@@ -191,13 +196,18 @@ const ListCountry = ({ countries, handleDelete }) => {
         .map((country) => {
           return (
             <li key={country.id}>
-              {country.countryName} - <MedalQuantity country={country} />
+              <CountryName name={country.countryName} /> -{" "}
+              <MedalQuantity country={country} />
               <button onClick={() => handleDelete(country.id)}>삭제</button>
             </li>
           );
         })}
     </ul>
   );
+};
+
+const CountryName = ({ name }) => {
+  return <>{name}</>;
 };
 
 const MedalQuantity = ({ country }) => {
