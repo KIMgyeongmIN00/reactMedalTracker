@@ -1,3 +1,9 @@
+import CountryInput from "./CountryInput";
+import MedalInput from "./MedalInput";
+import Buttons from "./Buttons";
+import ListCountry from "./ListCountry";
+import { useState } from "react";
+
 const Content = () => {
   const [countryName, setCountryName] = useState("");
   const [countGoldMedal, setCountGoldMedal] = useState(0); // state묶어보기
@@ -47,6 +53,12 @@ const Content = () => {
   // 국가 업데이트 핸들러
   const handleUpdate = (e) => {
     e.preventDefault();
+
+    // 유효성 검사
+    if (!countryName.trim()) {
+      alert("국가 이름을 입력해주세요.");
+      return;
+    }
 
     //일치자 찾기
     const isCountryFound = findCountryByName(countryName);
