@@ -1,0 +1,10 @@
+body {
+  background-color: #000000;
+}
+
+#root {
+  background-color: #fdfdfd;
+  border-radius: 15px;
+  border: 1px;
+  padding: 20px 25px 20px 25px;
+}
