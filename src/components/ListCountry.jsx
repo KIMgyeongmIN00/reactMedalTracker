@@ -1,7 +1,20 @@
 import CountryName from "./CountryName";
 import MedalQuantity from "./MedalQuantity";
 
-const ListCountry = ({ countries, handleDelete }) => {
+const ListCountry = ({ countries, setCountries }) => {
+  // 국가 삭제 핸들러
+  const handleDelete = (id) => {
+    // 국가 삭제
+    const deletedCountries = countries.filter((country) => country.id !== id);
+    setCountries(deletedCountries);
+
+    // 삭제할 국가 찾고
+    const countryToDelete = countries.find((country) => country.id === id);
+
+    // 삭제된 국가 이름을 알림창에 표시
+    alert(`${countryToDelete.countryName} 국가를 삭제했습니다.`);
+  };
+
   return (
     <ul>
       {countries
