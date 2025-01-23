@@ -2,11 +2,22 @@ import Inputs from "./Inputs";
 import Buttons from "./Buttons";
 import { useState } from "react";
 
-const Content = ({ countries, setCountries }) => {
+const Content = ({ countries, updateLocalStorage }) => {
   const [medalsInfo, setMedalsInfo] = useState({
     countryName: "",
     medals: { gold: 0, silver: 0, bronze: 0 },
   });
+
+  const resetMedalsInfo = () => {
+    setMedalsInfo({
+      countryName: "",
+      medals: {
+        gold: 0,
+        silver: 0,
+        bronze: 0,
+      },
+    });
+  };
 
   // 국가 찾는 함수
   const findCountryByName = (name) => {
@@ -39,17 +50,10 @@ const Content = ({ countries, setCountries }) => {
       bronzeMedal: Number(medalsInfo.medals.bronze),
     };
 
-    setCountries([...countries, newCountry]);
+    updateLocalStorage([...countries, newCountry]);
 
     // 인풋 내부 초기화
-    setMedalsInfo({
-      countryName: "",
-      medals: {
-        gold: 0,
-        silver: 0,
-        bronze: 0,
-      },
-    });
+    resetMedalsInfo();
   };
 
   // 국가 업데이트 핸들러
@@ -80,17 +84,10 @@ const Content = ({ countries, setCountries }) => {
       });
 
       // 업데이트된 배열로 상태 업데이트
-      setCountries(updatedCountries);
+      updateLocalStorage(updatedCountries);
 
       // 인풋 내부 초기화
-      setMedalsInfo({
-        countryName: "",
-        medals: {
-          gold: 0,
-          silver: 0,
-          bronze: 0,
-        },
-      });
+      resetMedalsInfo();
 
       alert(`${medalsInfo.countryName} 메달 데이터를 업데이트했습니다.`);
     } else {

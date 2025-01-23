@@ -1,12 +1,12 @@
 import CountryName from "./CountryName";
 import MedalQuantity from "./MedalQuantity";
 
-const ListCountry = ({ countries, setCountries }) => {
+const ListCountry = ({ countries, updateLocalStorage }) => {
   // 국가 삭제 핸들러
   const handleDelete = (id) => {
     // 국가 삭제
     const deletedCountries = countries.filter((country) => country.id !== id);
-    setCountries(deletedCountries);
+    updateLocalStorage(deletedCountries);
 
     // 삭제할 국가 찾고
     const countryToDelete = countries.find((country) => country.id === id);
