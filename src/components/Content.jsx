@@ -4,15 +4,15 @@ import Buttons from "./Buttons";
 import ListCountry from "./ListCountry";
 import { useState } from "react";
 
-const Content = () => {
+const Content = ({ countries, setCountries }) => {
   const [countryName, setCountryName] = useState("");
-  const [countries, setCountries] = useState([]);
   const [medals, setMedals] = useState({
     gold: 0,
     silver: 0,
     bronze: 0,
   });
 
+  // 국가 찾는 함수
   const findCountryByName = (name) => {
     return countries.find((country) => country.countryName === name);
   };
@@ -84,26 +84,14 @@ const Content = () => {
       setCountryName("");
       setMedals({ gold: 0, silver: 0, bronze: 0 });
 
-      alert(`${countryName} 메달\ 데이터를 업데이트했습니다.`);
+      alert(`${countryName} 메달 데이터를 업데이트했습니다.`);
     } else {
       // 국가가 존재하지 않으면 경고 메시지
       alert(`${countryName}에 해당하는 국가가 없습니다!`);
     }
   };
 
-  // 국가 삭제 핸들러
-  const handleDelete = (id) => {
-    // 삭제할 국가 찾기
-    const countryToDelete = countries.find((country) => country.id === id);
-
-    // 국가 삭제
-    const deletedCountries = countries.filter((country) => country.id !== id);
-    setCountries(deletedCountries);
-
-    // 삭제된 국가 이름을 알림창에 표시
-    alert(`${countryToDelete.countryName} 국가를 삭제했습니다.`);
-  };
-
+  // 메달 state 객체 핸들러
   const handleMedalChange = (type, value) => {
     setMedals((beforeMedals) => ({
       ...beforeMedals,
@@ -138,7 +126,6 @@ const Content = () => {
           handleUpdate={handleUpdate}
         />
       </form>
-      <ListCountry countries={countries} handleDelete={handleDelete} />
     </>
   );
 };
