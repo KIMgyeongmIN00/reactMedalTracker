@@ -6,10 +6,12 @@ import { useState } from "react";
 
 const Content = () => {
   const [countryName, setCountryName] = useState("");
-  const [countGoldMedal, setCountGoldMedal] = useState(0); // state묶어보기
-  const [countSilverMedal, setCountSilverMedal] = useState(0); // state묶어보기
-  const [countBronzeMedal, setCountBronzeMedal] = useState(0); // state묶어보기
   const [countries, setCountries] = useState([]);
+  const [medals, setMedals] = useState({
+    gold: 0,
+    silver: 0,
+    bronze: 0,
+  });
 
   const findCountryByName = (name) => {
     return countries.find((country) => country.countryName === name);
@@ -36,18 +38,16 @@ const Content = () => {
     const newCountry = {
       id: new Date().getTime(),
       countryName: countryName,
-      goldMedal: countGoldMedal,
-      silverMedal: countSilverMedal,
-      bronzeMedal: countBronzeMedal,
+      goldMedal: medals.gold,
+      silverMedal: medals.silver,
+      bronzeMedal: medals.bronze,
     };
 
     setCountries([...countries, newCountry]);
 
     // 인풋 내부 초기화
     setCountryName("");
-    setCountGoldMedal(0);
-    setCountSilverMedal(0);
-    setCountBronzeMedal(0);
+    setMedals({ gold: 0, silver: 0, bronze: 0 });
   };
 
   // 국가 업데이트 핸들러
@@ -69,9 +69,9 @@ const Content = () => {
         if (country.countryName === countryName) {
           return {
             ...country,
-            goldMedal: countGoldMedal,
-            silverMedal: countSilverMedal,
-            bronzeMedal: countBronzeMedal,
+            goldMedal: medals.gold,
+            silverMedal: medals.silver,
+            bronzeMedal: medals.bronze,
           };
         }
         return country;
@@ -82,9 +82,7 @@ const Content = () => {
 
       // 입력 필드 초기화
       setCountryName("");
-      setCountGoldMedal(0);
-      setCountSilverMedal(0);
-      setCountBronzeMedal(0);
+      setMedals({ gold: 0, silver: 0, bronze: 0 });
 
       alert(`${countryName} 메달\ 데이터를 업데이트했습니다.`);
     } else {
@@ -106,6 +104,13 @@ const Content = () => {
     alert(`${countryToDelete.countryName} 국가를 삭제했습니다.`);
   };
 
+  const handleMedalChange = (type, value) => {
+    setMedals((beforeMedals) => ({
+      ...beforeMedals,
+      [type]: value,
+    }));
+  };
+
   return (
     <>
       <form onSubmit={handleFormSubmit}>
@@ -115,18 +120,18 @@ const Content = () => {
         />
         <MedalInput
           medalType="금메달"
-          value={countGoldMedal}
-          onChange={setCountGoldMedal}
+          value={medals.gold}
+          onChange={(value) => handleMedalChange("gold", value)}
         />
         <MedalInput
           medalType="은메달"
-          value={countSilverMedal}
-          onChange={setCountSilverMedal}
+          value={medals.silver}
+          onChange={(value) => handleMedalChange("silver", value)}
         />
         <MedalInput
           medalType="동메달"
-          value={countBronzeMedal}
-          onChange={setCountBronzeMedal}
+          value={medals.bronze}
+          onChange={(value) => handleMedalChange("bronze", value)}
         />
         <Buttons
           handleFormSubmit={handleFormSubmit}
