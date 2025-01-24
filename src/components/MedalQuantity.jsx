@@ -1,10 +1,5 @@
-const MedalQuantity = ({ country }) => {
-  return (
-    <>
-      금메달:{country.goldMedal}개, 은메달:{country.silverMedal}개, 동메달:
-      {country.bronzeMedal}개
-    </>
-  );
+const MedalQuantity = ({ className, value }) => {
+  return <span className={className}> {value}개</span>;
 };
 
 export default MedalQuantity;
